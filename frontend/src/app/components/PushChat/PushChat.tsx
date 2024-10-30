@@ -26,9 +26,7 @@ function PushChat({ selectedAddress }: PushChatProps) {
     setChatPosition({ x: data.x, y: data.y }); // Update chat position
   };
 
-  const tempOwner = "0x7199D548f1B30EA083Fe668202fd5E621241CC89";
-  const tempFan = "0x768642B308bB4520F24Ed3A43a68232B470c25a2";
-  const chatId = address === tempOwner ? tempFan : tempOwner;
+  const chatId = selectedAddress;
 
   return (
     <>
