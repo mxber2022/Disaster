@@ -15,7 +15,7 @@ function Nav() {
           <div>
             <Link href="/" style={{ color: "black", textDecoration: "none" }}>
               <div className={`${styles.nav__logo} rajdhani-bold`}>
-                IconicInk
+                EMERGENCY
               </div>
             </Link>
           </div>
@@ -29,10 +29,7 @@ function Nav() {
                 pointerEvents: "none",
               }}
             >
-              <p className={styles.tagline}>
-                {" "}
-                Where Icons and Fans Create Sign Mint{" "}
-              </p>
+              <p className={styles.tagline}> Every Connection Matters </p>
             </Link>
           </div>
         </div>
