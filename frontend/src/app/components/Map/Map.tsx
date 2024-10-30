@@ -40,20 +40,21 @@ const Map: React.FC = () => {
   const [showChat, setShowChat] = useState<boolean>(false); // State for chat visibility
 
   const { address } = useAccount(); // Get the wallet address from the useAccount hook
-
+  const [locations, setLocations] = useState<Location[]>([]);
   // Fetch all pinned locations from the backend
-  const fetchLocations = async () => {
-    try {
-      const response = await axios.get<MarkerData[]>(
-        "http://localhost:5001/api/locations"
-      );
-      setMarkers(response.data);
-    } catch (error) {
-      console.error("Error fetching locations:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get<Location[]>(
+          "http://localhost:5000/api/locations"
+        );
+        setLocations(response.data);
+      } catch (error) {
+        console.error("Failed to fetch locations:", error);
+        // setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      }
+    };
+
     fetchLocations();
   }, []);
 

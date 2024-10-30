@@ -3,21 +3,53 @@
 import { useState, CSSProperties } from "react";
 import { useWriteContract, useSendTransaction } from "wagmi";
 import { parseEther } from "viem";
+import { useEffect } from "react";
+
+interface Location {
+  walletAddress: string;
+  lat: number;
+  lng: number;
+}
 
 function Donate() {
   const { data: hash, isPending, sendTransaction } = useSendTransaction();
 
   const [amount, setAmount] = useState("");
 
-  const handleDonate = () => {
+  const handleDonates = (location: any) => {
     console.log(`Donating: ${amount}`);
     setAmount("");
 
     sendTransaction({
-      to: "0x2CE74781bd1700498C0FA27a1266B228c9B0F776",
+      to: location.walletAddress,
       value: parseEther(amount),
     });
   };
+
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/api/locations");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setLocations(data);
+      } catch (error) {
+        console.error("Failed to fetch locations:", error);
+        // setError(error);
+      }
+    };
+
+    fetchLocations();
+  }, []); // Empty dependency array to run only once when the component mounts
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const styles: { [key: string]: CSSProperties } = {
     container: {
@@ -58,30 +90,49 @@ function Donate() {
   };
 
   return (
-    <div style={styles.container}>
-      <p style={styles.title}>Donate</p>
-      <input
-        type="number"
-        placeholder="Enter donation amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        style={styles.input}
-      />
-      <button
-        onClick={handleDonate}
-        style={styles.button}
-        onMouseOver={(e) =>
-          (e.currentTarget.style.backgroundColor =
-            styles.buttonHover.backgroundColor || "#005bb5")
-        } // Provide a fallback color
-        onMouseOut={(e) =>
-          (e.currentTarget.style.backgroundColor =
-            styles.button.backgroundColor || "#0070f3")
-        } // Provide a fallback color
-      >
-        Donate
-      </button>
-    </div>
+    <>
+      <div style={styles.container}>
+        <p style={styles.title}>Donate</p>
+        <input
+          type="number"
+          placeholder="Enter donation amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          style={styles.input}
+        />
+        {/* <button
+          onClick={handleDonate}
+          style={styles.button}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor =
+              styles.buttonHover.backgroundColor || "#005bb5")
+          } // Provide a fallback color
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor =
+              styles.button.backgroundColor || "#0070f3")
+          } // Provide a fallback color
+        >
+          Donate
+        </button> */}
+      </div>
+
+      <div className="container">
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <ul className="list">
+          {locations.map((location) => (
+            <li key={location.walletAddress} className="listItem">
+              <span className="walletAddress">{location.walletAddress}</span>
+              <button
+                onClick={() => handleDonates(location)}
+                className="donateButton"
+              >
+                Donate
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
 
