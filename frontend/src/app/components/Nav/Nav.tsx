@@ -22,13 +22,25 @@ function Nav() {
 
           <div>
             <Link
-              href=""
+              href="/donate"
               style={{
                 color: "black",
                 textDecoration: "none",
               }}
             >
               Donate
+            </Link>
+          </div>
+
+          <div>
+            <Link
+              href=""
+              style={{
+                color: "black",
+                textDecoration: "none",
+              }}
+            >
+              Post
             </Link>
           </div>
         </div>
