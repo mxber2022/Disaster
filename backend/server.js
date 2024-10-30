@@ -34,6 +34,11 @@ app.post("/api/locations", (req, res) => {
   res.status(201).json(newLocation);
 });
 
+app.delete("/api/locations", (req, res) => {
+  locations = []; // Clear the locations array
+  res.status(200).json({ message: "All locations cleared" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
