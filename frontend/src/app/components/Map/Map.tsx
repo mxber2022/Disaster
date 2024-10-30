@@ -8,6 +8,7 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import axios from "axios";
+import { useAccount } from "wagmi";
 
 // Define the types for the marker and API response
 interface MarkerData {
@@ -17,8 +18,8 @@ interface MarkerData {
 }
 
 const mapContainerStyle = {
-  height: "100vh",
-  width: "100%",
+  height: "600px", // Set a smaller height
+  width: "100%", // Maintain full width
 };
 
 const defaultCenter = {
@@ -28,13 +29,15 @@ const defaultCenter = {
 
 const Map: React.FC = () => {
   const [markers, setMarkers] = useState<MarkerData[]>([]);
-  const [walletAddress, setWalletAddress] = useState<string>("");
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
   const [center, setCenter] = useState(defaultCenter); // New state for map center
+  const [markerPlaced, setMarkerPlaced] = useState<boolean>(false); // Track if a marker has been placed
+
+  const { address } = useAccount(); // Get the wallet address from the useAccount hook
 
   // Fetch all pinned locations from the backend
   const fetchLocations = async () => {
@@ -76,8 +79,8 @@ const Map: React.FC = () => {
 
   // Handle saving the user's current location
   const saveCurrentLocation = async () => {
-    if (!walletAddress) {
-      alert("Please enter your wallet address first!");
+    if (!address) {
+      alert("Please connect your wallet first!");
       return;
     }
 
@@ -87,13 +90,14 @@ const Map: React.FC = () => {
     }
 
     const newMarker: MarkerData = {
-      walletAddress,
+      walletAddress: address, // Use the address from the useAccount hook
       lat: userLocation.lat,
       lng: userLocation.lng,
     };
 
     // Add the user's current location to the map
     setMarkers((current) => [...current, newMarker]);
+    setMarkerPlaced(true); // Mark that a marker has been placed
 
     // Send the user's current location to the backend
     try {
@@ -105,8 +109,14 @@ const Map: React.FC = () => {
 
   // Handle clicking on the map to add a new pin
   const onMapClick = async (event: google.maps.MapMouseEvent) => {
-    if (!walletAddress) {
-      alert("Please enter your wallet address first!");
+    if (!address) {
+      alert("Please connect your wallet first!");
+      return;
+    }
+
+    if (markerPlaced) {
+      // Check if a marker has already been placed
+      alert("A marker has already been placed!"); // Notify the user
       return;
     }
 
@@ -118,13 +128,14 @@ const Map: React.FC = () => {
     }
 
     const newMarker: MarkerData = {
-      walletAddress,
+      walletAddress: address, // Use the address from the useAccount hook
       lat,
       lng,
     };
 
     // Add the new pin to the map
     setMarkers((current) => [...current, newMarker]);
+    setMarkerPlaced(true); // Mark that a marker has been placed
 
     // Send the new pin to the backend
     try {
@@ -139,31 +150,7 @@ const Map: React.FC = () => {
   }, [markers]);
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Enter Wallet Address"
-        value={walletAddress}
-        onChange={(e) => setWalletAddress(e.target.value)}
-        style={{ marginBottom: "10px", width: "300px", padding: "8px" }}
-      />
-
-      <button
-        onClick={getUserLocation}
-        style={{ marginBottom: "10px", marginRight: "10px", padding: "8px" }}
-      >
-        Get My Location
-      </button>
-
-      {userLocation && (
-        <button
-          onClick={saveCurrentLocation}
-          style={{ marginBottom: "10px", padding: "8px" }}
-        >
-          Save My Location
-        </button>
-      )}
-
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <LoadScript googleMapsApiKey="AIzaSyC0sj2Vp1TDlgxwjZW_ga6IGUalupE4-Iw">
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
@@ -188,11 +175,57 @@ const Map: React.FC = () => {
               <div>
                 <h4>Wallet Address:</h4>
                 <p>{selectedMarker.walletAddress}</p>
+                <button
+                  onClick={() => {
+                    // Add your chat functionality here
+                    alert(`Chat with: ${selectedMarker.walletAddress}`);
+                  }}
+                  style={{
+                    marginTop: "10px",
+                    padding: "5px",
+                    backgroundColor: "#4CAF50", // Green background
+                    color: "white", // White text
+                    border: "none", // No border
+                    borderRadius: "5px", // Rounded corners
+                    cursor: "pointer", // Pointer cursor on hover
+                  }}
+                >
+                  Chat
+                </button>
               </div>
             </InfoWindow>
           )}
         </GoogleMap>
       </LoadScript>
+
+      {/* Button Container */}
+      <div style={{ padding: "10px", textAlign: "center" }}>
+        <button
+          onClick={getUserLocation}
+          style={{ marginBottom: "10px", marginRight: "10px", padding: "8px" }}
+        >
+          Get My Location
+        </button>
+
+        {userLocation && (
+          <button
+            onClick={saveCurrentLocation}
+            style={{ marginBottom: "10px", padding: "8px" }}
+          >
+            Save My Location
+          </button>
+        )}
+
+        {/* Button to reset marker placement */}
+        {markerPlaced && (
+          <button
+            onClick={() => setMarkerPlaced(false)}
+            style={{ marginBottom: "10px", padding: "8px" }}
+          >
+            Place Another Marker
+          </button>
+        )}
+      </div>
     </div>
   );
 };
