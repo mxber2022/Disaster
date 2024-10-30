@@ -151,6 +151,10 @@ const Map: React.FC = () => {
     console.log("Markers:", markers);
   }, [markers]);
 
+  function donateme() {
+    console.log("donated");
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <LoadScript googleMapsApiKey="AIzaSyC0sj2Vp1TDlgxwjZW_ga6IGUalupE4-Iw">
@@ -203,6 +207,7 @@ const Map: React.FC = () => {
       <div style={{ padding: "10px", textAlign: "center" }}>
         <button
           onClick={getUserLocation}
+          className="btn"
           style={{ marginBottom: "10px", marginRight: "10px", padding: "8px" }}
         >
           Get My Location
@@ -210,6 +215,7 @@ const Map: React.FC = () => {
 
         {userLocation && (
           <button
+            className="btn"
             onClick={saveCurrentLocation}
             style={{ marginBottom: "10px", padding: "8px" }}
           >
@@ -218,10 +224,12 @@ const Map: React.FC = () => {
         )}
 
         {/* Button to reset marker placement */}
+
         {markerPlaced && (
           <button
+            className="btn"
             onClick={() => setMarkerPlaced(false)}
-            style={{ marginBottom: "10px", padding: "8px" }}
+            style={{ marginBottom: "10px", padding: "8px", marginLeft: "8px" }}
           >
             Place Another Marker
           </button>

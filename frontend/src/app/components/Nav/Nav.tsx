@@ -26,10 +26,9 @@ function Nav() {
               style={{
                 color: "black",
                 textDecoration: "none",
-                pointerEvents: "none",
               }}
             >
-              <p className={styles.tagline}> Every Connection Matters </p>
+              Donate
             </Link>
           </div>
         </div>
