@@ -9,6 +9,7 @@ import {
 } from "@react-google-maps/api";
 import axios from "axios";
 import { useAccount } from "wagmi";
+import PushChat from "../PushChat/PushChat"; // Import your PushChat component
 
 // Define the types for the marker and API response
 interface MarkerData {
@@ -36,6 +37,7 @@ const Map: React.FC = () => {
   } | null>(null);
   const [center, setCenter] = useState(defaultCenter); // New state for map center
   const [markerPlaced, setMarkerPlaced] = useState<boolean>(false); // Track if a marker has been placed
+  const [showChat, setShowChat] = useState<boolean>(false); // State for chat visibility
 
   const { address } = useAccount(); // Get the wallet address from the useAccount hook
 
@@ -177,8 +179,7 @@ const Map: React.FC = () => {
                 <p>{selectedMarker.walletAddress}</p>
                 <button
                   onClick={() => {
-                    // Add your chat functionality here
-                    alert(`Chat with: ${selectedMarker.walletAddress}`);
+                    setShowChat(true); // Show the chat when clicked
                   }}
                   style={{
                     marginTop: "10px",
@@ -226,6 +227,11 @@ const Map: React.FC = () => {
           </button>
         )}
       </div>
+
+      {/* Render PushChat component when the chat button is clicked */}
+      {showChat && selectedMarker && (
+        <PushChat selectedAddress={selectedMarker.walletAddress} />
+      )}
     </div>
   );
 };
