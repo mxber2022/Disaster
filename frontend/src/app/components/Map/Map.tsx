@@ -45,7 +45,7 @@ const Map: React.FC = () => {
   const fetchLocations = async () => {
     try {
       const response = await axios.get<MarkerData[]>(
-        "http://localhost:5001/api/locations"
+        "https://emergencybackend-g9scdbasl-mxber2022s-projects.vercel.app/api/locations"
       );
       setMarkers(response.data);
     } catch (error) {
@@ -103,7 +103,10 @@ const Map: React.FC = () => {
 
     // Send the user's current location to the backend
     try {
-      await axios.post("http://localhost:5001/api/locations", newMarker);
+      await axios.post(
+        "https://emergencybackend-g9scdbasl-mxber2022s-projects.vercel.app/api/locations",
+        newMarker
+      );
     } catch (error) {
       console.error("Error saving location:", error);
     }
@@ -141,7 +144,10 @@ const Map: React.FC = () => {
 
     // Send the new pin to the backend
     try {
-      await axios.post("http://localhost:5001/api/locations", newMarker);
+      await axios.post(
+        "https://emergencybackend-g9scdbasl-mxber2022s-projects.vercel.app/api/locations",
+        newMarker
+      );
     } catch (error) {
       console.error("Error saving location:", error);
     }

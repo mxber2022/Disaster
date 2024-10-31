@@ -32,7 +32,9 @@ function Donate() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("http://localhost:5001/api/locations");
+        const response = await fetch(
+          "https://emergencybackend-g9scdbasl-mxber2022s-projects.vercel.app/api/locations"
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
