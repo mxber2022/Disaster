@@ -1,7 +1,3 @@
-Here's the updated GitHub README reflecting the new features that allow users to make posts and donations in **Emergency**:
-
----
-
 # **Emergency** 🌐🚨
 
 _A Decentralized Real-Time Communication Tool for Natural Disasters in Southeast Asia_
