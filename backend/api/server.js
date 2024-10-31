@@ -17,6 +17,9 @@ app.get("/api/locations", (req, res) => {
   // Return all stored locations and wallet addresses
   res.json(locations);
 });
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
 
 app.post("/api/locations", (req, res) => {
   // Add new wallet address and location to the array
