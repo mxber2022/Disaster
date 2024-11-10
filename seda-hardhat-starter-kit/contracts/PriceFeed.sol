@@ -40,7 +40,7 @@ contract PriceFeed {
         SedaDataTypes.DataRequestInputs memory inputs = SedaDataTypes
             .DataRequestInputs(
                 oracleProgramId,                // Oracle Program ID (0x...)
-                "eth-usdc",                     // Inputs for the data request (ETH-USDC)
+                "13.719711,100.574572",                     // Inputs for the data request (ETH-USDC)
                 oracleProgramId,                // Tally binary ID (same as DR binary ID in this example)
                 hex"00",                        // Tally inputs
                 1,                              // Replication factor (number of nodes required to execute the DR)
@@ -76,5 +76,22 @@ contract PriceFeed {
 
         // Return 0 if no valid result or no consensus.
         return 0;
+    }
+
+    function latestWeather() public view returns (string memory) {
+        // Ensure a data request has been transmitted.
+        require(dataRequestId != bytes32(0), "No data request transmitted");
+
+        // Fetch the data result from the SedaProver contract using the stored data request ID.
+        SedaDataTypes.DataResult memory dataResult = sedaProverContract.getDataResult(dataRequestId);
+
+        // Check if the data result reached consensus (≥ 66% agreement among nodes).
+        if (dataResult.consensus) {
+            // Return the result as a string (temperature, weather description, etc.)
+            return string(dataResult.result);
+        }
+
+        // Return an empty string if no valid result or no consensus.
+        return "";
     }
 }
