@@ -17,6 +17,8 @@ To verfiy the live status weather.
 tx │ 'CE41E83F4B88D0C3679F298FC106CB1F1BBE6A51A1808A57532414DCC57B8D8D' │
 oracleProgramId │ '40d0e4c86523f7bc378a8f5a0f18e148248dd1068b48e9f21d7d539afb0f1e8e'
 
+https://devnet.explorer.seda.xyz/data-requests/bd303dd78a29a5d144daf1c71e122519194b324662b16d72b96daa72bbd31329
+
 ### 🗺️ **Location Pinning (Powered by Express.js Backend)**
 
 Users can pin their **precise location** on an interactive map in case of an emergency. The pinned location data is stored in a **Node.js** and **Express.js** backend, allowing rescuers and volunteers to quickly access and locate people in need.
