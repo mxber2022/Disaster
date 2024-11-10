@@ -124,6 +124,11 @@ function Donate() {
           {locations.map((location) => (
             <li key={location.walletAddress} className="listItem">
               <span className="walletAddress">{location.walletAddress}</span>
+              {" _____ "}
+              <span className="walletAddress"> {location.lat}</span> <br />
+              {" _____ "}
+              <span className="walletAddress"> {location.lng}</span> <br />
+              {" _____ "}
               <button
                 onClick={() => handleDonates(location)}
                 className="donateButton"

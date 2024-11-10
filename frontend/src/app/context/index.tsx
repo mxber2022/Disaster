@@ -11,9 +11,8 @@ import {
 } from "@reown/appkit/networks";
 import React, { type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
-//import { EVMWalletChain,NetworkId } from '@/config';
+import { defineChain } from "@reown/appkit/networks";
 
-// Set up queryClient
 const queryClient = new QueryClient();
 
 if (!projectId) {
@@ -28,34 +27,33 @@ const metadata = {
   icons: [""],
 };
 
-// const near = {
-//   id: EVMWalletChain.chainId,
-//   name: EVMWalletChain.name,
-//   nativeCurrency: {
-//     decimals: 18,
-//     name: 'NEAR',
-//     symbol: 'NEAR',
-//   },
-//   rpcUrls: {
-//     default: { http: [EVMWalletChain.rpc] },
-//     public: { http: [EVMWalletChain.rpc] },
-//   },
-//   blockExplorers: {
-//     default: {
-//       name: 'NEAR Explorer',
-//       url: EVMWalletChain.explorer,
-//     },
-//   },
-//   testnet: NetworkId === 'testnet',
-// };
+const customNetwork = defineChain({
+  id: 5115,
+  caipNetworkId: "eip155:5115",
+  chainNamespace: "eip155",
+  name: "CITREA TESTNET",
+  nativeCurrency: {
+    decimals: 18,
+    name: "CBTC",
+    symbol: "CBTC",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.testnet.citrea.xyz"],
+    },
+  },
+  blockExplorers: {
+    default: { name: "Explorer", url: "BLOCK_EXPLORER_URL" },
+  },
+  contracts: {},
+});
 
-// Create the modal
 const modal = createAppKit({
   themeMode: "dark",
   themeVariables: {},
   adapters: [wagmiAdapter],
   projectId,
-  networks: [zoraSepolia, auroraTestnet],
+  networks: [zoraSepolia, auroraTestnet, customNetwork],
   defaultNetwork: zoraSepolia,
   allowUnsupportedChain: true,
   metadata: metadata,
