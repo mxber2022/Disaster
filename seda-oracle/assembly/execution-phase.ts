@@ -73,9 +73,7 @@ export function executionPhase(): void {
     );
 
     // Report the weather condition back to the SEDA network.
-    const result = Bytes.fromUtf8String(
-      `Condition: ${weatherCondition} - ${weatherDescription}`
-    );
+    const result = Bytes.fromUtf8String(`${weatherDescription}`);
     Process.success(result);
   } else {
     Console.error("Weather condition data is missing or malformed");
